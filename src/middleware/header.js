@@ -72,6 +72,7 @@ module.exports = function(middleware) {
 			},
 			user: function(next) {
 				var userData = {
+
 					uid: 0,
 					username: '[[global:guest]]',
 					userslug: '',
