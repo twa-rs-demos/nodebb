@@ -5,7 +5,8 @@
   "url": "http://www.baidu.com",
   "library": "./library.js",
   "hooks": [
-    { "hook": "filter:scripts.get", "method": "addScripts" }
+    { "hook": "filter:scripts.get", "method": "addScripts" },
+    { "hook": "static:app.load", "method": "init" }
   ],
   "staticDirs": {
     "lib": "public/lib"
