@@ -1,6 +1,12 @@
 (function (module) {
 
 	'use strict';
+
+	var fs = module.parent.require('fs');
+	var JSON = require('json3');
+
+	var bodyParser = require("body-parser");
+
 	var comments = {};
 	comments.addScripts = function (scripts, callback) {
 
@@ -14,9 +20,7 @@
 	};
 
 	comments.init = function (params, callback) {
-
 		console.log("我是后台取数据的");
-
 
 		var app = params.router,
 			middleware = params.middleware,
@@ -31,7 +35,11 @@
 
 		var content = req.body.content;
 		console.log(content);
-		res.json({result:"发射数据来后台"});
+		// res.send("发射数据来后台");
+		// var t = {"a":"后台发射的数据,KAIXIN"};
+		// console.log(JSON.parse('{"a":"后台发射的数据,KAIXIN"}'));
+		res.json("后台发射的数据,KAIXIN");
+		// res.json(JSON.stringify(t));
 
 
 	};

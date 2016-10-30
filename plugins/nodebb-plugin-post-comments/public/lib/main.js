@@ -24,7 +24,7 @@
 			data:{content:"传数据nodebb"},
 			dataType: "json/application",
 			success:function(result){
-				console.log(result.result);
+				console.log(result);
 
 				console.log("来自后台返回的数据，去哈哈");
 			},
