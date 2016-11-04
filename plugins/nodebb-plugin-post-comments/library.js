@@ -1,47 +1,39 @@
 (function (module) {
 
 	'use strict';
-
-	var fs = module.parent.require('fs');
+	var posts, comments = {};
 	var JSON = require('json3');
-
 	var bodyParser = require("body-parser");
-
-	var comments = {};
 	comments.addScripts = function (scripts, callback) {
-          
+
 		console.log("我是一个新插件");
 
 		scripts.push('plugins/nodebb-plugin-post-comments/lib/main.js');
 		callback(null, scripts);
-
 	};
 
 	comments.init = function (params, callback) {
-
 		var app = params.router,
 			middleware = params.middleware,
 			controllers = params.controllers;
-
-		app.post('/posts/getComments', comments.replyPost);
+		app.get('/posts', comments.getPostsId);
 		callback();
 
 	};
 
-	comments.replyPost = function (req, res, callback) {
+	comments.getPostsId = function (req, res, callback) {
+		res.json(JSON.stringify(posts.posts[0]));
+	};
 
-		var content = req.body.content;
-		console.log(content);
-		// res.send("发射数据来后台");
-
-		// console.log(JSON.parse('{"a":"后台发射的数据,KAIXIN"}'));
-		res.json(JSON.stringify({"a":"后台发射的数据,KAIXIN"}));
-		// res.json(JSON.stringify(t));
-
+	comments.getPosts = function (ids, callback) {
+		posts = ids;
+		callback(null, ids);
 	};
 
 	module.exports = comments;
 }(module));
+
+
 
 
 

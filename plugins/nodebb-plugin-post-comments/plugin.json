@@ -6,7 +6,8 @@
   "library": "./library.js",
   "hooks": [
     { "hook": "filter:scripts.get", "method": "addScripts" },
-    { "hook": "static:app.load", "method": "init" }
+    { "hook": "static:app.load", "method": "init" },
+    {"hook":"filter:post.getPosts","method":"getPosts"}
   ],
   "staticDirs": {
     "lib": "public/lib"
