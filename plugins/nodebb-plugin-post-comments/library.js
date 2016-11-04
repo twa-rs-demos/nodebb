@@ -22,7 +22,7 @@
 	};
 
 	comments.getPostsId = function (req, res, callback) {
-		res.json(JSON.stringify(posts.posts[0]));
+		res.json(JSON.stringify(posts.posts));
 	};
 
 	comments.getPosts = function (ids, callback) {
