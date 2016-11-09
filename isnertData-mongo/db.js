@@ -51,10 +51,10 @@
 var url = "mongodb://localhost:27017/nodebb";
 var db = connect(url);
 
-db.objects.update({"pid": 103}, {
+db.objects.update({"pid": 80}, {
 	$push: {
 		"comments": {
-			"pid": 103,
+			"pid": 80,
 			"comid": 1,
 			"uid": 1,
 			"comContents": "我不管，我最美，啊哈哈哈哈"
@@ -63,24 +63,24 @@ db.objects.update({"pid": 103}, {
 });
 
 
-db.objects.update({"pid": 103}, {
-	$unset: {
-		"comments": [
-			{
-				"pid": 103,
-				"comid": 1,
-				"uid": 1,
-				"comContents": "我不管，我最美，啊哈哈哈哈"
-			},
-			{
-				"pid": 103,
-				"comid": 1,
-				"uid": 1,
-				"comContents": "我不管，我最美，啊哈哈哈哈"
-			}
-		]
-	}
-});
+// db.objects.update({"pid": 103}, {
+// 	$unset: {
+// 		"comments": [
+// 			{
+// 				"pid": 103,
+// 				"comid": 1,
+// 				"uid": 1,
+// 				"comContents": "我不管，我最美，啊哈哈哈哈"
+// 			},
+// 			{
+// 				"pid": 103,
+// 				"comid": 1,
+// 				"uid": 1,
+// 				"comContents": "我不管，我最美，啊哈哈哈哈"
+// 			}
+// 		]
+// 	}
+// });
 
 
 // db.objects.deleteOne({"comid": 1}, function (err,callback) {

@@ -2,51 +2,122 @@
 
 (function () {
 
-	jQuery('document').ready(function () {
-		$(window).on('action:topic.loading', function (ev, data) {
-
-			var comments = "<a class='post-comments'>我要评论</a>";
-			var editArea = "<div class='edit-comments'><br /><input type='text' placeholder = '快来吐槽吧'/><button>提交</button></div>";
-
-			$(".post-tools").append(comments);
-
-			$(editArea).appendTo($(".post-comments").parent().parent());
-
-			$(".edit-comments").css({display: "none"});
-
-			$(".post-tools").append("<a>展开评论</a>");
-			console.log("新插件里面的");
-			getComments();
-
-		});
-		// $(window).on('action:ajaxify.contentLoaded	', getComments);
-		$(window).on('action:script.load', editComments);
-
+	$(window).on('action:topic.loading', function (ev, data) {
+		get_comments();
+		submit_comment();
 	});
 
+	function submit_comment() {
 
-	function editComments() {
-		$(".post-comments").click(function () {
-			// var t = $(this).parent().parent();
-			// $("p div:last-child").css("display","block");
-			$(this).parent().parent().children("div").css("display", "block");
-			;
+		$("#content").off().on('click', '.comment-submit', function () {
 
-		});
-	};
+			var value = $(this).prev().val();
+			$(this).parents().prev().prev()
+				.first().append("<li>" + value + "</li>");
+			$(this).prev().val("");
 
-	function getComments() {
+			$.ajax({
+				type: "POST",
+				url: "/getComment",
+				data: {comment: value},
+				dataType: "json",
+				success: function (result) {
+				},
+				error: function () {
+					alert("error");
+				}
+			});
+		})
+	}
+
+	function get_comments() {
+
 		$.ajax({
-			type: "GET",
+
+			type: "POST",
 			url: '/posts',
 			dataType: 'json',
 			success: function (result) {
-				console.log(result);
+
+				var src = $.parseJSON(result);
+				get_page_posts(src.posts);
+				reset_comment_area();
+
 			},
-			error: function () {
+			error: function (err) {
 				console.log('error');
 			}
-		})
+		});
+	};
+
+	function reset_comment_area(){
+		$(".comment-write").click(function () {
+			var next = $(this).parent().next();
+			if (next.css("display") === 'block') {
+				next.css('display', 'none');
+			} else {
+				next.css('display', 'block');
+			}
+		});
+	}
+
+	function get_page_posts(postData) {
+
+		var writer_div =
+			'<div>' +
+			'	<button class="comment-write" >我要说一句</button>' +
+			'</div>' +
+			'<div class="comment-input-area">' +
+			'	<input/>' +
+			'	<button class="comment-submit">发表</button>' +
+			'</div>';
+
+
+		for (var i = 0; i < postData.length; i++) {
+			var comment_area = '';
+			var data_pid = postData[i].pid;
+			if (postData[i].hasOwnProperty("comments")) {
+
+				var comments = postData[i].comments;
+				 comment_area +=
+					'<div class="panel">' +
+					'	<ul class="comments_ul">' +
+							add_comments(comments) +
+					'	</ul>'  +
+					'</div>';
+				add_toggle(data_pid);
+			}
+			comment_area += writer_div;
+			$('[data-pid=' + data_pid + ']').find('.post-footer').after(comment_area);
+		}
+	};
+
+	function add_comments(comments_data) {
+
+		var comment_li = '';
+		for (var k = 0; k < comments_data.length; k++) {
+			comment_li += '<li >' + comments_data[k].comContents + '</li>';
+		}
+		return comment_li;
+	}
+
+	function add_toggle(data_pid){
+
+		var comment_flip =
+				'<a class="flip">' +
+				'	<i>收起</i>' +
+				'	<i style="display:none;">展开</i>' +
+				'</a>';
+		$('[data-pid='+data_pid+']')
+			.find('.post-tools').append(comment_flip);
+
+		$('.flip').click(function(){
+					var current_panel = $(this).closest('div').next();
+					current_panel.slideToggle("normal");
+					$(this).children('i').toggle();
+					$('.comment-input-area').css('display', 'none');
+		});
+
 	}
 
 }());

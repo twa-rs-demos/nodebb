@@ -11,5 +11,12 @@
   ],
   "staticDirs": {
     "lib": "public/lib"
-  }
+  },
+  "scripts": [
+    "public/lib/main.js"
+  ],
+  "less":[
+    "./public/less/getComments.less"
+  ]
+
 }
